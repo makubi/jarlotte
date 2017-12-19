@@ -35,7 +35,7 @@
                         <version>${project.version}</version>
                     </initializerArtifact>
 
-                    <initializerClass>de.metacoder.jarlotte.jettyinitializer.Initializer</initializerClass>
+                    <initializerClass>de.metacoder.jarlotte.mainclassinitializer.Initializer</initializerClass>
 
                 </configuration>
                 <executions>
