@@ -28,35 +28,23 @@ import org.eclipse.aether.resolution.{ArtifactRequest, ArtifactResult, Dependenc
 import org.eclipse.aether.util.artifact.JavaScopes
 import org.eclipse.aether.util.filter.DependencyFilterUtils
 
-class JarPackagingMojoExecutor2(mojo: JarPackagingMojo) {
+class WarPackagingMojoExecutor(mojo: WarPackagingMojo) {
 
   def execute(): Unit = {
 
     val targetDir = Paths.get(mojo.getProject.getBuild.getDirectory).toFile
     val projectFinalName: String = mojo.getProject.getBuild.getFinalName
-//    val warFile = Paths.get(mojo.getProject.getBuild.getDirectory, s"$projectFinalName.war").toFile
-//    val extractedWarDir = Paths.get(mojo.getProject.getBuild.getDirectory, "extracted-war-jarlotte", projectFinalName)
+    val buildDir = Paths.get(mojo.getProject.getBuild.getDirectory, projectFinalName).toFile
     val jarlotteZipFileName = s"$projectFinalName-jarlotte.jar"
 
-//    if(!warFile.exists()){
-//      throw new MojoFailureException(s"Couldn't find $warFile. Please make sure that the maven war plugin ran in this phase before (order in xml matters, see effective pom in doubt)!")
-//    }
-//
-//    new ZipFile(warFile).extractAll(extractedWarDir.toString)
+    if(!buildDir.exists()){
+      throw new MojoFailureException(s"Couldn't find target directory $targetDir. Please make sure that the maven war plugin ran in this phase before (order in xml matters, see effective pom in doubt)!")
+    }
 
     /* Step 1: Add WAR-Content to jar */
     val zipFile = new ZipFile(Paths.get(targetDir.getAbsolutePath, jarlotteZipFileName).toFile)
     val zipParameters = new ZipParameters
-    zipParameters.setRootFolderInZip(projectFinalName)
-
-    import scala.collection.JavaConverters._
-    mojo.getProject.getDependencyArtifacts.asScala.foreach { a =>
-      resolveArtifacts(s"${a.getGroupId}:${a.getArtifactId}:${a.getVersion}").foreach { d =>
-        zipFile.addFile(d.getArtifact.getFile, zipParameters)
-      }
-      zipFile.addFile(a.getFile, zipParameters)
-    }
-    zipFile.addFile(Paths.get(mojo.getProject.getBuild.getDirectory, s"$projectFinalName.jar").toFile, zipParameters)
+    zipFile.addFolder(buildDir, zipParameters)
 
     /* Step 2: Add Jarlotte stuff */
 
@@ -70,7 +58,7 @@ class JarPackagingMojoExecutor2(mojo: JarPackagingMojo) {
     mojo.getLog.info(s"Extracting ${loaderZipFile.getFile} to $loaderZipFileExtractionDir")
     loaderZipFile.extractAll(loaderZipFileExtractionDir.getAbsolutePath)
 
-    zipFile.addFolder(Paths.get(loaderZipFileExtractionDir.getAbsolutePath, "de").toFile, new ZipParameters)
+    zipFile.addFolder(Paths.get(loaderZipFileExtractionDir.getAbsolutePath, "de").toFile, zipParameters)
     val metaInfZipParameters = new ZipParameters
     metaInfZipParameters.setRootFolderInZip("META-INF")
 

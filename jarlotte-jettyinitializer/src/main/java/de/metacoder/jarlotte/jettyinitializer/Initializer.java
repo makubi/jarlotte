@@ -14,6 +14,7 @@
 
 package de.metacoder.jarlotte.jettyinitializer;
 
+import de.metacoder.jarlotte.api.JarlotteContext;
 import de.metacoder.jarlotte.api.JarlotteInitializer;
 import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.Server;
@@ -29,7 +30,7 @@ public class Initializer implements JarlotteInitializer {
 
     private Server server;
 
-    public void initialize(File webAppDir) {
+    public void initialize(JarlotteContext context) {
         try {
             final String jettyPortProperty = System.getProperty("jetty.port");
 
@@ -55,8 +56,8 @@ public class Initializer implements JarlotteInitializer {
             classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration", "org.eclipse.jetty.annotations.AnnotationConfiguration");
 
             WebAppContext wac = new WebAppContext();
-            wac.setResourceBase(webAppDir.getAbsolutePath());
-            wac.setDescriptor(webAppDir.getAbsolutePath() + "WEB-INF/web.xml");
+            wac.setResourceBase(context.getWebappDir().getAbsolutePath());
+            wac.setDescriptor(context.getWebappDir().getAbsolutePath() + "WEB-INF/web.xml");
             wac.setContextPath("/");
             wac.setClassLoader(new WebAppClassLoader(getClass().getClassLoader(), wac));
 

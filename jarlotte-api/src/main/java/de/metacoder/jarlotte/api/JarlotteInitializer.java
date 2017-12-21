@@ -14,11 +14,9 @@
 
 package de.metacoder.jarlotte.api;
 
-import java.io.File;
-
 public interface JarlotteInitializer {
 
-    void initialize(File webAppDir);
+    void initialize(JarlotteContext context);
 
     void stop();
 }

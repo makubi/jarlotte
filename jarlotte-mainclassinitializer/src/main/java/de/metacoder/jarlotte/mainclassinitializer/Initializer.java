@@ -14,6 +14,7 @@
 
 package de.metacoder.jarlotte.mainclassinitializer;
 
+import de.metacoder.jarlotte.api.JarlotteContext;
 import de.metacoder.jarlotte.api.JarlotteInitializer;
 
 import java.io.File;
@@ -24,16 +25,16 @@ import java.util.List;
 
 public class Initializer implements JarlotteInitializer {
 
-    public void initialize(File webAppDir) {
+    public void initialize(JarlotteContext context) {
         try {
             List<URL> jarUrls = new ArrayList<URL>();
-            for (File jar : webAppDir.getAbsoluteFile().listFiles()) {
+            for (File jar : context.getWebappDir().getAbsoluteFile().listFiles()) {
                 jarUrls.add(jar.toURI().toURL());
             }
 
             ClassLoader classLoader = new URLClassLoader(jarUrls.toArray(new URL[jarUrls.size()]));
             Thread.currentThread().setContextClassLoader(classLoader);
-            Class<?> aClass = classLoader.loadClass("TODO");
+            Class<?> aClass = classLoader.loadClass(context.getProperties().get("Main-Class"));
             String[] args = null;
             aClass.getMethod("main", String[].class).invoke(null, (Object) args); // TODO
         } catch(Exception e){

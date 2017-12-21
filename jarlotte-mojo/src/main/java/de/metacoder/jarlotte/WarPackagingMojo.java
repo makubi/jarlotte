@@ -32,18 +32,14 @@ import org.eclipse.aether.repository.RemoteRepository;
 import java.util.List;
 
 
-@Mojo(name = "packageJar", threadSafe = true, requiresDependencyResolution = ResolutionScope.COMPILE, requiresDependencyCollection = ResolutionScope.COMPILE)
-public class JarPackagingMojo extends AbstractMojo {
+@Mojo(name = "packageWar", threadSafe = true, requiresDependencyResolution = ResolutionScope.COMPILE, requiresDependencyCollection = ResolutionScope.COMPILE)
+public class WarPackagingMojo extends AbstractMojo {
 
     @Parameter(required = true)
     private String initializerClass;
 
     @Parameter(name = "initializerArtifact", readonly = true)
     private InitializerArtifact initializerArtifact;
-
-
-    @Parameter(required = true)
-    private String mainClass;
 
     @Parameter(defaultValue = "${project}", readonly = true )
     private MavenProject project;
@@ -63,16 +59,13 @@ public class JarPackagingMojo extends AbstractMojo {
     @Component
     private MavenProjectHelper projectHelper;
 
+
     public String getInitializerClass() {
         return initializerClass;
     }
 
     public InitializerArtifact getInitializerArtifact() {
         return initializerArtifact;
-    }
-
-    public String getMainClass() {
-        return mainClass;
     }
 
     public MavenProject getProject() {
@@ -101,10 +94,10 @@ public class JarPackagingMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if("jar".equals(project.getPackaging())){
-            new JarPackagingMojoExecutor(this).execute();
+        if("war".equals(project.getPackaging())){
+            new WarPackagingMojoExecutor(this).execute();
         } else {
-            getLog().info("Not packaging jarlotte jar because packaging is not \"jar\" (current: "+project.getPackaging()+")");
+            getLog().info("Not packaging jarlotte jar because packaging is not \"war\" (current: "+project.getPackaging()+")");
         }
     }
 

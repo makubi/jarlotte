@@ -35,14 +35,14 @@
                         <version>${project.version}</version>
                     </initializerArtifact>
 
-                    <initializerClass>de.metacoder.jarlotte.mainclassinitializer.Initializer</initializerClass>
+                    <initializerClass>de.metacoder.jarlotte.jettyinitializer.Initializer</initializerClass>
 
                 </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>packageJar</goal>
+                            <goal>packageWar</goal>
                         </goals>
                     </execution>
                 </executions>
