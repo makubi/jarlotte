@@ -24,6 +24,7 @@
         <module>jarlotte-jettyinitializer</module>
         <module>jarlotte-api</module>
         <module>jarlotte-loader</module>
+        <module>jarlotte-mainclassinitializer</module>
     </modules>
 
     <properties>

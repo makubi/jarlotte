@@ -25,10 +25,10 @@ public class Stage1 {
 
     public static void main(String... args) throws Exception {
         Stage1 stage1 = new Stage1();
-        stage1.boot();
+        stage1.boot(args);
     }
 
-    public void boot() throws Exception {
+    public void boot(String... args) throws Exception {
         System.out.println("Jarlotte is running =)");
 
         final File tempWorkingDir = Files.createTempDirectory("jarlotte").toFile();
